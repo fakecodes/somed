@@ -13,9 +13,19 @@
         @csrf
     </form>
 
-    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6">
+    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6" enctype="multipart/form-data">
         @csrf
         @method('patch')
+        <div class="mt-4">
+            @if($profile->photo)
+                <img src="{{ asset('storage/' . $profile->photo) }}" alt="Profile Photo" class="mt-4 w-16 h-16 rounded-full">
+            @endif
+            <x-input-label for="photo" :value="__('Change Photo')" class="text-blue-500 font-semibold" />
+
+            <!-- File input -->
+            <input id="photo" name="photo" type="file" class="hidden" onchange="updateFileName(this)" />
+            <x-input-error :messages="$errors->get('photo')" class="mt-2" />
+        </div>
 
         <div>
             <x-input-label for="name" :value="__('Name')" />
@@ -23,6 +33,26 @@
             <x-input-error class="mt-2" :messages="$errors->get('name')" />
         </div>
 
+        <!-- Bio -->
+        <div>
+            <x-input-label for="bio" :value="__('Bio')" />
+            <x-text-input id="bio" name="bio" type="text" class="mt-1 block w-full" :value="old('bio', $profile->bio)" required autofocus autocomplete="bio" />
+            <x-input-error class="mt-2" :messages="$errors->get('bio')" />
+        </div>
+
+        <!-- Interests -->
+        <div class="mt-4">
+            <x-input-label for="interests" :value="__('Interests')" />
+            <x-text-input 
+                id="interests" 
+                name="interests" 
+                type="text" 
+                class="block mt-1 w-full" 
+                :value="old('interests', is_array($profile->interests) ? implode(',', $profile->interests) : $profile->interests)" 
+            />
+            <x-input-error :messages="$errors->get('interests')" class="mt-2" />
+        </div>
+        
         <div>
             <x-input-label for="email" :value="__('Email')" />
             <x-text-input id="email" name="email" type="email" class="mt-1 block w-full" :value="old('email', $user->email)" required autocomplete="username" />

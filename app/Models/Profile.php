@@ -8,4 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 class Profile extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'user_id',
+        'photo',
+        'bio',
+        'interests',
+    ];
+
+    protected $casts = [
+        'interests' => 'array',
+    ];
 }

@@ -19,6 +19,7 @@ class ProfileController extends Controller
     {
         return view('profile.edit', [
             'user' => $request->user(),
+            'profile' => Profile::where('user_id', Auth::id())->first(),
         ]);
     }
 
@@ -32,12 +33,31 @@ class ProfileController extends Controller
 
     public function update(Request $request) {
         $profile = Profile::where('user_id', Auth::id())->first();
-        if ($profile) {
-            $profile->update($request->only('photo', 'bio', 'interests'));
-        }
-        return redirect()->back();
-    }
 
+        if ($profile) {
+            // Validate the incoming request data
+            $validatedData = $request->validate([
+                'bio' => 'nullable|string',
+                'interests' => 'nullable|string',
+                'photo' => 'nullable|image|max:2048', // Validate the photo upload
+            ]);
+    
+            // Handle file upload
+            if ($request->hasFile('photo')) {
+                // Store the photo and get its path
+                $path = $request->file('photo')->store('photos', 'public');
+                $validatedData['photo'] = $path; // Update the photo path in the validated data
+            }
+    
+            // Process interests field
+            $validatedData['interests'] = array_map('trim', explode(',', $request->input('interests', '')));
+    
+            // Update the profile with the validated data
+            $profile->update($validatedData);
+        }
+    
+        return redirect()->back()->with('success', 'Profile updated successfully!');
+    }
     
     /**
      * Update the user's profile information.

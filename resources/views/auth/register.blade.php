@@ -1,5 +1,5 @@
 <x-guest-layout>
-    <form method="POST" action="{{ route('register') }}">
+    <form method="POST" action="{{ route('register') }}" enctype="multipart/form-data">
         @csrf
 
         <!-- Name -->
@@ -37,6 +37,33 @@
                             name="password_confirmation" required autocomplete="new-password" />
 
             <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
+        </div>
+
+        <!-- Bio -->
+        <div class="mt-4">
+            <x-input-label for="bio" :value="__('Bio')" />
+            <x-text-input id="bio" class="block mt-1 w-full" type="text" name="bio" />
+        </div>
+
+        <!-- Interests -->
+        <div class="mt-4">
+            <x-input-label for="interests" :value="__('Interests')" />
+            <x-text-input 
+                id="interests" 
+                name="interests" 
+                type="text" 
+                class="block mt-1 w-full"
+                value="{{ old('interests') }}"
+            />
+            <x-input-error :messages="$errors->get('interests')" class="mt-2" />
+        </div>
+
+
+        <!-- Photo Upload -->
+        <div class="mt-4">
+            <x-input-label for="photo" :value="__('Photo')" />
+            <x-text-input id="photo" class="block mt-1 w-full" type="file" name="photo" />
+            <x-input-error :messages="$errors->get('photo')" class="mt-2" />
         </div>
 
         <div class="flex items-center justify-end mt-4">
