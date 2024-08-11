@@ -13,10 +13,13 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $posts = Post::where('user_id', Auth::id())
-        ->with(['user', 'comments.user'])
-        ->latest()
-        ->get();
+        // $posts = Post::where('user_id', Auth::id())
+        // ->with(['user', 'comments.user'])
+        // ->latest()
+        // ->get();
+        
+        // Fetch all posts with comments and their users
+        $posts = Post::with(['user', 'comments.user'])->latest()->get();
 
         // Add a humanizedDate attribute to each post
         $posts->each(function ($post) {

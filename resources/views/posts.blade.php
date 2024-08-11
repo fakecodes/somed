@@ -19,32 +19,32 @@
                 </div>
 
                 <!-- Comment Button -->
-                <div class="mt-4">
-                        <button type="button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                            Comment
-                        </button>
+                <!-- <div class="mt-4">
+                    <button type="button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                        Comment
+                    </button>
+                </div> -->
+
+                <!-- Display existing comments -->
+                @if($post->comments->isNotEmpty())
+                    <div class="mt-4">
+                        <h3 class="text-lg font-semibold">Comments:</h3>
+                        @foreach($post->comments as $comment)
+                            <div class="mt-2">
+                                <p><strong>{{ $comment->user->name }}:</strong> {{ $comment->comment }}</p>
+                            </div>
+                        @endforeach
                     </div>
+                @endif
 
-                    <!-- Display existing comments -->
-                    @if($post->comments->isNotEmpty())
-                        <div class="mt-4">
-                            <h3 class="text-lg font-semibold">Comments:</h3>
-                            @foreach($post->comments as $comment)
-                                <div class="mt-2">
-                                    <p><strong>{{ $comment->user->name }}:</strong> {{ $comment->comment }}</p>
-                                </div>
-                            @endforeach
-                        </div>
-                    @endif
-
-                    <!-- Comment Form -->
-                    <form method="POST" action="{{ route('comments.store', $post->id) }}" class="mt-4">
-                        @csrf
-                        <textarea name="content" rows="2" class="w-full p-2 border rounded text-black" placeholder="Add a comment..." required></textarea>
-                        <button type="submit" class="mt-2 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-                            Post Comment
-                        </button>
-                    </form>
+                <!-- Comment Form -->
+                <form method="POST" action="{{ route('comments.store', $post->id) }}" class="mt-4">
+                    @csrf
+                    <textarea name="content" rows="2" class="w-full p-2 border rounded text-black" placeholder="Add a comment..." required></textarea>
+                    <button type="submit" class="mt-2 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                        Post Comment
+                    </button>
+                </form>
 
             </div>
         </div>
