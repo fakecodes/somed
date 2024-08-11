@@ -7,8 +7,10 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
 use App\Models\Profile;
+use App\Models\User;
 
 class ProfileController extends Controller
 {
@@ -54,6 +56,16 @@ class ProfileController extends Controller
     
             // Update the profile with the validated data
             $profile->update($validatedData);
+        }
+
+        $user = User::where('id', Auth::id())->first();
+        if ($user) {
+            $validatedData = $request->validate([
+                'name' => 'required|string|max:255',
+                'email' => 'required|email|max:255|unique:users,email,' . $user->id,
+                'password' => 'nullable|string|min:8|confirmed',
+            ]);
+            $user->update($validatedData);
         }
     
         return redirect()->back()->with('success', 'Profile updated successfully!');
