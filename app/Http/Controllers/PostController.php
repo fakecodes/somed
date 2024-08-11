@@ -17,10 +17,12 @@ class PostController extends Controller
 
         $post = new Post();
         $post->user_id = Auth::id();
-        $post->content = $request->input('content');
+        $post->text = $request->input('content');
         // Handle file uploads
         if ($request->hasFile('image')) {
-            $post->image = $request->file('image')->store('images');
+            $img = $request->file('image')->store('photos', 'public');
+            $post->image = $img;
+            // $post->image = $request->file('image')->store('images');
         }
         if ($request->hasFile('video')) {
             $post->video = $request->file('video')->store('videos');
@@ -35,5 +37,4 @@ class PostController extends Controller
         $post->delete();
         return redirect()->back();
     }
-
 }
