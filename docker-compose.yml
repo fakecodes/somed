@@ -13,6 +13,20 @@ services:
       - "3306:3306"
     volumes:
       - db_data:/var/lib/mysql
+  
+  # phpmyadmin:
+  #   image: phpmyadmin/phpmyadmin
+  #   container_name: phpmyadmin
+  #   platform: linux/arm64/v8
+  #   environment:
+  #     PMA_HOST: db
+  #     PMA_PORT: 3306
+  #     PMA_USER: user
+  #     PMA_PASSWORD: password
+  #   ports:
+  #     - "8080:80"
+  #   depends_on:
+  #     - db
 
 volumes:
   db_data:
